@@ -17,15 +17,18 @@ def esdf(M, N, obstacle_list):
     # 1) deal with distance transform in cols
     esdf_map = np.zeros((M, N))
     for j in range(N):
+        # construct input for 1d distance transform
         pos = np.array([])
         for i in range(M):
             if grid_map[i, j] == 1:
                 pos = np.append(pos, i)
+        # perform 1d distance transform
         D = distance_transform(M, pos, np.zeros(M))
         esdf_map[:, j] = D
 
     # 2) deal with distance transform in rows
     for i in range(M):
+        # construct input for 1d distance transform
         pos = np.array([])
         f = np.array([])
         for j in range(N):
@@ -34,6 +37,7 @@ def esdf(M, N, obstacle_list):
                 f = np.append(f, esdf_map[i, j])
             else:
                 f = np.append(f, 0.)
+        # perform 1d distance transform
         D = distance_transform(N, pos.astype(int), f)
         esdf_map[i, :] = D
     return np.sqrt(esdf_map)
@@ -41,7 +45,7 @@ def esdf(M, N, obstacle_list):
 
 def distance_transform(n, pos, f):
     """
-    Perform distance transformation
+    Perform 1d distance transformation
     e.g.
     [Inf, 0, 4]
     input: n = 3, pos = [1, 2], f = [0, 0, 4]
